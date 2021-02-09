@@ -63,8 +63,52 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Starting Test:");
 }
+// MAIN CODE
+int previousMillis = 0;
+int previousMillis2 = 0;
+void loop(){
+  long interval = 2000;
+  int numXAxis = analogRead(XAxis);
+  int numYAxis = analogRead(YAxis);
+
+  if(numYAxis < 700 && numYAxis > 300){
+    TurnOff();
+  }
+  if(numXAxis < 700 && numXAxis > 300){
+    TurnOff();
+  }
+  while(numYAxis > 700){
+    TurnOn();
+    Backward(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+  }
+  
+  while(numYAxis < 300){
+    TurnOn();
+    Forward(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+  }
+  
+  while(numXAxis > 700){
+    TurnOn();
+    Left(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+  }
+  
+  while(numXAxis < 300){
+    TurnOn();
+    Right(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+  } 
+}
+
 // code to move to robot forward at Speed for Duration
-void Forward(int Speed, int Duration){
+void Forward(int Speed){
+  Serial.println("Forward");
   digitalWrite(RIGHT_FRONT_A, HIGH);
   digitalWrite(RIGHT_FRONT_B, LOW);
   analogWrite(RIGHT_FRONT_PWM, Speed);
@@ -77,10 +121,10 @@ void Forward(int Speed, int Duration){
   digitalWrite(LEFT_BACK_A, HIGH);
   digitalWrite(LEFT_BACK_B, LOW);
   analogWrite(LEFT_BACK_PWM, Speed);
-  delay(Duration*1000); 
 }
 // code to move to robot backward at Speed for Duration
-void Backward(int Speed, int Duration){
+void Backward(int Speed){
+  Serial.println("Backward");
   digitalWrite(RIGHT_FRONT_A, LOW);
   digitalWrite(RIGHT_FRONT_B, HIGH);
   analogWrite(RIGHT_FRONT_PWM, Speed);
@@ -93,10 +137,10 @@ void Backward(int Speed, int Duration){
   digitalWrite(LEFT_BACK_A, LOW);
   digitalWrite(LEFT_BACK_B, HIGH);
   analogWrite(LEFT_BACK_PWM, Speed);
-  delay(Duration*1000); 
 }
 // code to move to robot left at Speed for Duration
-void Left(int Speed, int Duration){
+void Left(int Speed){
+  Serial.println("Left");
   digitalWrite(RIGHT_FRONT_A, LOW);
   digitalWrite(RIGHT_FRONT_B, HIGH);
   analogWrite(RIGHT_FRONT_PWM, Speed);
@@ -109,10 +153,9 @@ void Left(int Speed, int Duration){
   digitalWrite(LEFT_BACK_A, HIGH);
   digitalWrite(LEFT_BACK_B, LOW);
   analogWrite(LEFT_BACK_PWM, Speed);
-  delay(Duration*1000); 
 }
 // code to move to robot right at Speed for Duration
-void Right(int Speed, int Duration){
+void Right(int Speed){
   digitalWrite(RIGHT_FRONT_A, HIGH);
   digitalWrite(RIGHT_FRONT_B, LOW);
   analogWrite(RIGHT_FRONT_PWM, Speed);
@@ -124,11 +167,11 @@ void Right(int Speed, int Duration){
   analogWrite(LEFT_FRONT_PWM, Speed);
   digitalWrite(LEFT_BACK_A, LOW);
   digitalWrite(LEFT_BACK_B, HIGH);
-  analogWrite(LEFT_BACK_PWM, Speed);
-  delay(Duration*1000); 
+  analogWrite(LEFT_BACK_PWM, Speed); 
 }
 // code to stop the robot
 void Stop(){
+  Serial.println("STOP");
   digitalWrite(RIGHT_FRONT_A, LOW);
   digitalWrite(RIGHT_FRONT_B, LOW);
   analogWrite(RIGHT_FRONT_PWM, 0);
@@ -144,47 +187,13 @@ void Stop(){
 }
 // code for robot to enter low power mode
 void TurnOff(){
+  Serial.println("Turned Off");
   digitalWrite(LEFT_STANDBY,LOW);
   digitalWrite(RIGHT_STANDBY,LOW);
 }
 // code for robot to exit low power mode
 void TurnOn(){
+  Serial.println("Turned On");
   digitalWrite(LEFT_STANDBY,HIGH);
   digitalWrite(RIGHT_STANDBY,HIGH);
-}
-// MAIN CODE
-void loop(){
-  int numXAxis = analogRead(XAxis);
-  int numYAxis = analogRead(YAxis);
-  Serial.print("YAxis = ");
-  Serial.println(numYAxis);
-  Serial.print("XAxis = ");
-  Serial.println(numXAxis);
-  if(numYAxis < 700 && numYAxis > 300){
-    TurnOff();
-  }
-  if(numYAxis > 700){
-    Serial.println("Backward");
-    TurnOn();
-    Backward(100,2);
-  }
-  if(numYAxis < 300){
-    Serial.println("Forward");
-    TurnOn();
-    Forward(100,3);
-  }
-  if(numXAxis < 700 && numXAxis > 300){
-    TurnOff();
-  }
-  if(numXAxis > 700){
-    Serial.println("Left");
-    TurnOn();
-    Left(100,4);
-  }
-  if(numXAxis < 300){
-    Serial.println("Right");
-    TurnOn();
-    Right(100,4);
-  }
-  delay(500);
 }
