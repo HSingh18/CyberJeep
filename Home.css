@@ -1,0 +1,13 @@
+div#title{
+    margin: 20px;
+    text-align: center;
+}
+img#banner{
+    width: 100px;
+}
+h1{
+    text-align:center;
+}
+.button-native{
+    margin-top: 10px;
+}
