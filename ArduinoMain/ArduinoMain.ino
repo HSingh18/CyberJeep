@@ -19,6 +19,14 @@
 #define YAxis A9
 #define XAxis A8
 #define Button 50
+// Variables for Ultrasonic Sensors
+#define TRIG1 30
+#define ECHO1 31
+#define TRIG2 32
+#define ECHO2 33
+#define TRIG3 34
+#define ECHO3 35
+#define MinDistance 1024
 
 void setup() {
   // put your setup code here, to run once:
@@ -42,6 +50,13 @@ void setup() {
   pinMode(YAxis, INPUT);
   pinMode(Button, INPUT);
 
+  pinMode(TRIG1, OUTPUT);
+  pinMode(ECHO1, INPUT);
+  pinMode(TRIG2, OUTPUT);
+  pinMode(ECHO2, INPUT);
+  pinMode(TRIG3, OUTPUT);
+  pinMode(ECHO3, INPUT);
+
   // turning off all motors,
   // setting speed of the motor to 0
   // turning on low power mode
@@ -64,10 +79,10 @@ void setup() {
   Serial.println("Starting Test:");
 }
 // MAIN CODE
-int previousMillis = 0;
-int previousMillis2 = 0;
 void loop(){
-  long interval = 2000;
+  digitalWrite(TRIG1, LOW);
+  digitalWrite(TRIG2, LOW);
+  digitalWrite(TRIG3, LOW);
   int numXAxis = analogRead(XAxis);
   int numYAxis = analogRead(YAxis);
 
@@ -78,34 +93,76 @@ void loop(){
     TurnOff();
   }
   while(numYAxis > 700){
-    TurnOn();
-    Backward(100);
-    numXAxis = analogRead(XAxis);
-    numYAxis = analogRead(YAxis);
+    if(GetDistance() == true){
+      TurnOn();
+      Backward(100);
+      numXAxis = analogRead(XAxis);
+      numYAxis = analogRead(YAxis);
+    }
+    else{
+      TurnOff();
+    }
   }
   
   while(numYAxis < 300){
-    TurnOn();
-    Forward(100);
-    numXAxis = analogRead(XAxis);
-    numYAxis = analogRead(YAxis);
+    if(GetDistance() == true){
+      TurnOn();
+      Forward(100);
+      numXAxis = analogRead(XAxis);
+      numYAxis = analogRead(YAxis);
+    }
+    else{
+      TurnOff();
+    }
   }
   
   while(numXAxis > 700){
-    TurnOn();
-    Left(100);
-    numXAxis = analogRead(XAxis);
-    numYAxis = analogRead(YAxis);
+    if(GetDistance() == true){
+      TurnOn();
+      Left(100);
+      numXAxis = analogRead(XAxis);
+      numYAxis = analogRead(YAxis);
+    }
+    else{
+      TurnOff();
+    }
   }
   
   while(numXAxis < 300){
-    TurnOn();
-    Right(100);
-    numXAxis = analogRead(XAxis);
-    numYAxis = analogRead(YAxis);
+    if(GetDistance() == true){
+      TurnOn();
+      Right(100);
+      numXAxis = analogRead(XAxis);
+      numYAxis = analogRead(YAxis);
+    }
+    else{
+      TurnOff();
+    }
   } 
 }
-
+// code to get distance from ultrasonic sensors
+bool GetDistance(){
+  digitalWrite(TRIG1, HIGH);
+  digitalWrite(TRIG2, HIGH);
+  digitalWrite(TRIG3, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG1, LOW);
+  digitalWrite(TRIG2, LOW);
+  digitalWrite(TRIG3, LOW);
+  int Duration1 = pulseIn(ECHO1, HIGH);
+  int Duration2 = pulseIn(ECHO2, HIGH);
+  int Duration3 = pulseIn(ECHO3, HIGH);
+  int Distance1 = Duration1 * 0.034 / 2;
+  int Distance2 = Duration2 * 0.034 / 2;
+  int Distance3 = Duration3 * 0.034 / 2;
+  if(Distance1 < MinDistance || Distance2 < MinDistance || Distance3 < MinDistance){
+    return false;
+  }
+  else{
+    return true;
+  }
+  
+}
 // code to move to robot forward at Speed for Duration
 void Forward(int Speed){
   Serial.println("Forward");
