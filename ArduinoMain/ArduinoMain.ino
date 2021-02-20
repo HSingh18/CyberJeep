@@ -26,8 +26,7 @@
 #define ECHO2 33
 #define TRIG3 34
 #define ECHO3 35
-#define MinDistance 20
-#define CYCLE 100U
+#define MinDistance 2000
 
 void setup() {
   // put your setup code here, to run once:
@@ -80,109 +79,79 @@ void setup() {
   digitalWrite(TRIG2, LOW);
   digitalWrite(TRIG3, LOW);
 
+  GetDistance();
+
   Serial.begin(9600);
   Serial.println("Starting Test:");
-}
-
-unsigned long lastMillis = 0;
-boolean state = false;
-
-boolean check(unsigned long *lastMillis, unsigned int cycle) {
-  unsigned long currentMillis = millis();
-  if (currentMillis - *lastMillis >= cycle) {
-    *lastMillis = currentMillis;
-    return true;
-  }
-  else {
-    return false;
-  }
 }
 
 // MAIN CODE
 void loop() {
   int numXAxis = analogRead(XAxis);
   int numYAxis = analogRead(YAxis);
-  if (check(&lastMillis, CYCLE)) {
-    GetDistance();
-  }
+
   if (numYAxis < 700 && numYAxis > 300) {
     Stop();
-    if (check(&lastMillis, CYCLE)) {
-    GetDistance();
   }
-  }
+
   if (numXAxis < 700 && numXAxis > 300) {
     Stop();
-    if (check(&lastMillis, CYCLE)) {
-    GetDistance();
   }
-  }
+
   while (numYAxis > 700) {
-    //    TurnOn();
+    TurnOn();
     Backward(100);
     numXAxis = analogRead(XAxis);
     numYAxis = analogRead(YAxis);
-    if (check(&lastMillis, CYCLE)) {
-    GetDistance();
-  }
   }
 
   while (numYAxis < 300) {
-    //    TurnOn();
     Forward(100);
     numXAxis = analogRead(XAxis);
     numYAxis = analogRead(YAxis);
-    if (check(&lastMillis, CYCLE)) {
     GetDistance();
-  }
   }
 
   while (numXAxis > 700) {
-    //    TurnOn();
     Left(100);
     numXAxis = analogRead(XAxis);
     numYAxis = analogRead(YAxis);
-    if (check(&lastMillis, CYCLE)) {
     GetDistance();
-  }
   }
 
   while (numXAxis < 300) {
-    //    TurnOn();
     Right(100);
     numXAxis = analogRead(XAxis);
     numYAxis = analogRead(YAxis);
-    if (check(&lastMillis, CYCLE)) {
     GetDistance();
-  }
   }
 }
 // code to get distance from ultrasonic sensors
 void GetDistance() {
   digitalWrite(TRIG1, HIGH);
-  digitalWrite(TRIG2, HIGH);
-  digitalWrite(TRIG3, HIGH);
+  //  digitalWrite(TRIG2, HIGH);
+  //  digitalWrite(TRIG3, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG1, LOW);
-  digitalWrite(TRIG2, LOW);
-  digitalWrite(TRIG3, LOW);
+  //  digitalWrite(TRIG2, LOW);
+  //  digitalWrite(TRIG3, LOW);
   int Duration1 = pulseIn(ECHO1, HIGH);
-  int Duration2 = pulseIn(ECHO2, HIGH);
-  int Duration3 = pulseIn(ECHO3, HIGH);
-  int Distance1 = Duration1 * 0.034 / 2;
+  //  int Duration2 = pulseIn(ECHO2, HIGH);
+  //  int Duration3 = pulseIn(ECHO3, HIGH);
+  //  int Distance1 = Duration1 * 0.034 / 2;
   //  int Distance2 = Duration2 * 0.034 / 2;
   //  int Distance3 = Duration3 * 0.034 / 2;
-  int Distance2 = 1000;
-  int Distance3 = 1000;
-  Serial.print("Distance: "); Serial.println(Distance1);
-  if (Distance1 < MinDistance || Distance2 < MinDistance || Distance3 < MinDistance) {
+  //  int Distance2 = 1000;
+  //  int Distance3 = 1000;
+  Serial.print("Distance: "); Serial.println(Duration1);
+  //  if (Distance1 < MinDistance || Distance2 < MinDistance || Distance3 < MinDistance) {
+  if (Duration1 < MinDistance) {
     TurnOff();
   }
   else {
     TurnOn();
     Serial.println("Turned On");
   }
-
 }
 // code to move to robot forward at Speed for Duration
 void Forward(int Speed) {
