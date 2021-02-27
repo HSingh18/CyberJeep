@@ -132,7 +132,7 @@ boolean OBJAvoidance() {
   if (GetDistance1() < MinDistance || GetDistance2() < MinDistance || GetDistance3() < MinDistance) {
     TurnOff();
   }
-  else() {
+  else {
     TurnOn();
   }
 }
@@ -142,7 +142,7 @@ int GetDistance1() {
   digitalWrite(TRIG1, LOW);
   int Duration1 = pulseIn(ECHO1, HIGH);
   Serial.print("Distance1: "); Serial.println(Duration1);
-  return Duration1
+  return Duration1;
 }
 int GetDistance2() {
   digitalWrite(TRIG2, HIGH);
@@ -150,7 +150,7 @@ int GetDistance2() {
   digitalWrite(TRIG2, LOW);
   int Duration2 = pulseIn(ECHO2, HIGH);
   Serial.print("Distance2: "); Serial.println(Duration2);
-  return Duration2
+  return Duration2;
 }
 int GetDistance3() {
   digitalWrite(TRIG3, HIGH);
@@ -158,7 +158,7 @@ int GetDistance3() {
   digitalWrite(TRIG3, LOW);
   int Duration3 = pulseIn(ECHO3, HIGH);
   Serial.print("Distance3: "); Serial.println(Duration3);
-  return Duration3
+  return Duration3;
 }
 
 // code to move to robot forward at Speed for Duration
