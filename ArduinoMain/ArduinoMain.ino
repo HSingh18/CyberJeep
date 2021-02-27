@@ -79,9 +79,7 @@ void setup() {
   digitalWrite(TRIG2, LOW);
   digitalWrite(TRIG3, LOW);
 
-  GetDistance();
-  GetDistance2();
-  GetDistance3();
+  OBJAvoidance();
 
   Serial.begin(9600);
   Serial.println("Starting Test:");
@@ -108,85 +106,59 @@ void loop() {
   }
 
   while (numYAxis < 300) {
-    if( GetDistance() == true && GetDistance2() == true && GetDistance3() == true){
-      Forward(100);
-      numXAxis = analogRead(XAxis);
-      numYAxis = analogRead(YAxis);
-    }
-    else{
-      TurnOff();
-    }
+    Forward(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+    OBJAvoidance();
   }
 
   while (numXAxis > 700) {
     Left(100);
     numXAxis = analogRead(XAxis);
     numYAxis = analogRead(YAxis);
-    GetDistance();
-    GetDistance2();
-    GetDistance3();
+    OBJAvoidance();
   }
 
   while (numXAxis < 300) {
     Right(100);
     numXAxis = analogRead(XAxis);
     numYAxis = analogRead(YAxis);
-    GetDistance();
-    GetDistance2();
-    GetDistance3();
+    OBJAvoidance();
   }
   delay(500);
 }
 // code to get distance from ultrasonic sensors
-boolean GetDistance() {
+boolean OBJAvoidance() {
+  if (GetDistance1() < MinDistance || GetDistance2() < MinDistance || GetDistance3() < MinDistance) {
+    TurnOff();
+  }
+  else() {
+    TurnOn();
+  }
+}
+int GetDistance1() {
   digitalWrite(TRIG1, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG1, LOW);
   int Duration1 = pulseIn(ECHO1, HIGH);
-  //  int Distance2 = Duration2 * 0.034 / 2;
-  //  int Distance3 = Duration3 * 0.034 / 2;
   Serial.print("Distance1: "); Serial.println(Duration1);
-  if (Duration1 < MinDistance) {
-    TurnOff();
-    return false;
-  }
-  else {
-    TurnOn();
-    Serial.println("Turned On");
-    return true;
-  }
+  return Duration1
 }
-boolean GetDistance2() {
+int GetDistance2() {
   digitalWrite(TRIG2, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG2, LOW);
   int Duration2 = pulseIn(ECHO2, HIGH);
   Serial.print("Distance2: "); Serial.println(Duration2);
-  if (Duration2 < MinDistance) {
-    TurnOff();
-    return false;
-  }
-  else {
-    TurnOn();
-    Serial.println("Turned On");
-    return true;
-  }
+  return Duration2
 }
-boolean GetDistance3() {
+int GetDistance3() {
   digitalWrite(TRIG3, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG3, LOW);
   int Duration3 = pulseIn(ECHO3, HIGH);
   Serial.print("Distance3: "); Serial.println(Duration3);
-  if (Duration3 < MinDistance) {
-    TurnOff();
-    return false;
-  }
-  else {
-    TurnOn();
-    Serial.println("Turned On");
-    return true;
-  }
+  return Duration3
 }
 
 // code to move to robot forward at Speed for Duration
