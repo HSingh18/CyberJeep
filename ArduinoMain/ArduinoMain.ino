@@ -84,11 +84,11 @@ void setup() {
   mySerial.begin(9600);
   Serial.println("Starting Test:");
 }
-int val;
+int value;
 // MAIN CODE
 void loop() {    
   if(mySerial.available()){
-    Serial.println(mySerial.read());
+    value=value+mySerial.read();
   }
 //  int numXAxis = analogRead(XAxis);
 //  int numYAxis = analogRead(YAxis);
