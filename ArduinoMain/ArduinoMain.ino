@@ -125,7 +125,6 @@ void loop() {
     numYAxis = analogRead(YAxis);
     OBJAvoidance();
   }
-  delay(500);
 }
 // code to get distance from ultrasonic sensors
 boolean OBJAvoidance() {
@@ -141,7 +140,7 @@ int GetDistance1() {
   delayMicroseconds(10);
   digitalWrite(TRIG1, LOW);
   int Duration1 = pulseIn(ECHO1, HIGH);
-  Serial.print("Distance1: "); Serial.println(Duration1);
+  //  Serial.print("Distance1: "); Serial.println(Duration1);
   return Duration1;
 }
 int GetDistance2() {
@@ -149,7 +148,7 @@ int GetDistance2() {
   delayMicroseconds(10);
   digitalWrite(TRIG2, LOW);
   int Duration2 = pulseIn(ECHO2, HIGH);
-  Serial.print("Distance2: "); Serial.println(Duration2);
+  //  Serial.print("Distance2: "); Serial.println(Duration2);
   return Duration2;
 }
 int GetDistance3() {
@@ -157,7 +156,7 @@ int GetDistance3() {
   delayMicroseconds(10);
   digitalWrite(TRIG3, LOW);
   int Duration3 = pulseIn(ECHO3, HIGH);
-  Serial.print("Distance3: "); Serial.println(Duration3);
+  //  Serial.print("Distance3: "); Serial.println(Duration3);
   return Duration3;
 }
 
