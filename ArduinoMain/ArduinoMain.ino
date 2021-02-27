@@ -1,3 +1,4 @@
+#include <SoftwareSerial.h>
 // pins for low power mode
 #define RIGHT_STANDBY 3
 #define LEFT_STANDBY 6
@@ -18,7 +19,6 @@
 // pins for joystick control
 #define YAxis A9
 #define XAxis A8
-#define Button 50
 // Variables for Ultrasonic Sensors
 #define TRIG1 32
 #define ECHO1 33
@@ -27,7 +27,7 @@
 #define TRIG3 36
 #define ECHO3 37
 #define MinDistance 2000
-
+SoftwareSerial mySerial(0, 1);
 void setup() {
   // put your setup code here, to run once:
   pinMode(RIGHT_BACK_A, OUTPUT);
@@ -48,7 +48,6 @@ void setup() {
 
   pinMode(XAxis, INPUT);
   pinMode(YAxis, INPUT);
-  pinMode(Button, INPUT);
 
   pinMode(TRIG1, OUTPUT);
   pinMode(ECHO1, INPUT);
@@ -82,49 +81,53 @@ void setup() {
   OBJAvoidance();
 
   Serial.begin(9600);
+  mySerial.begin(9600);
   Serial.println("Starting Test:");
 }
-
+int val;
 // MAIN CODE
-void loop() {
-  int numXAxis = analogRead(XAxis);
-  int numYAxis = analogRead(YAxis);
-
-  if (numYAxis < 700 && numYAxis > 300) {
-    Stop();
+void loop() {    
+  if(mySerial.available()){
+    Serial.println(mySerial.read());
   }
-
-  if (numXAxis < 700 && numXAxis > 300) {
-    Stop();
-  }
-
-  while (numYAxis > 700) {
-    TurnOn();
-    Backward(100);
-    numXAxis = analogRead(XAxis);
-    numYAxis = analogRead(YAxis);
-  }
-
-  while (numYAxis < 300) {
-    Forward(100);
-    numXAxis = analogRead(XAxis);
-    numYAxis = analogRead(YAxis);
-    OBJAvoidance();
-  }
-
-  while (numXAxis > 700) {
-    Left(100);
-    numXAxis = analogRead(XAxis);
-    numYAxis = analogRead(YAxis);
-    OBJAvoidance();
-  }
-
-  while (numXAxis < 300) {
-    Right(100);
-    numXAxis = analogRead(XAxis);
-    numYAxis = analogRead(YAxis);
-    OBJAvoidance();
-  }
+//  int numXAxis = analogRead(XAxis);
+//  int numYAxis = analogRead(YAxis);
+//
+//  if (numYAxis < 700 && numYAxis > 300) {
+//    Stop();
+//  }
+//
+//  if (numXAxis < 700 && numXAxis > 300) {
+//    Stop();
+//  }
+//
+//  while (numYAxis > 700) {
+//    TurnOn();
+//    Backward(100);
+//    numXAxis = analogRead(XAxis);
+//    numYAxis = analogRead(YAxis);
+//  }
+//
+//  while (numYAxis < 300) {
+//    Forward(100);
+//    numXAxis = analogRead(XAxis);
+//    numYAxis = analogRead(YAxis);
+//    OBJAvoidance();
+//  }
+//
+//  while (numXAxis > 700) {
+//    Left(100);
+//    numXAxis = analogRead(XAxis);
+//    numYAxis = analogRead(YAxis);
+//    OBJAvoidance();
+//  }
+//
+//  while (numXAxis < 300) {
+//    Right(100);
+//    numXAxis = analogRead(XAxis);
+//    numYAxis = analogRead(YAxis);
+//    OBJAvoidance();
+//  }
 }
 // code to get distance from ultrasonic sensors
 boolean OBJAvoidance() {
