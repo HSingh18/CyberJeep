@@ -26,8 +26,10 @@
 #define ECHO2 35
 #define TRIG3 36
 #define ECHO3 37
+#define RX 0
+#define TX 1
 #define MinDistance 2000
-SoftwareSerial mySerial(0, 1);
+SoftwareSerial mySerial = SoftwareSerial(RX, TX);
 void setup() {
   // put your setup code here, to run once:
   pinMode(RIGHT_BACK_A, OUTPUT);
@@ -79,55 +81,72 @@ void setup() {
   digitalWrite(TRIG3, LOW);
 
   OBJAvoidance();
+  //  pinMode(RX, INPUT);
+  //  pinMode(TX, OUTPUT);
 
   Serial.begin(9600);
   mySerial.begin(9600);
   Serial.println("Starting Test:");
 }
-int value;
+//int value;
+//char letter = " ";
 // MAIN CODE
-void loop() {    
-  if(mySerial.available()){
-    value=value+mySerial.read();
+void loop() {
+  //    if (mySerial.available()) {
+  //    letter = mySerial.read();
+  //    Serial.write(letter);
+  //    mySerial.println("OK");
+  //    Serial.print("Data ");Serial.println(mySerial.available());
+  //  }
+  //   if (Serial.available()) {
+  //    letter = Serial.read();
+  //    Serial.write(letter);
+  //    value = letter;
+  //    Serial.write(value);
+  //    if(letter == "B"){
+  //      TurnOn();
+  //      Backward(100);
+  //    }
+  //   }
+
+  int numXAxis = analogRead(XAxis);
+  int numYAxis = analogRead(YAxis);
+
+  if (numYAxis < 700 && numYAxis > 300) {
+    Stop();
   }
-//  int numXAxis = analogRead(XAxis);
-//  int numYAxis = analogRead(YAxis);
-//
-//  if (numYAxis < 700 && numYAxis > 300) {
-//    Stop();
-//  }
-//
-//  if (numXAxis < 700 && numXAxis > 300) {
-//    Stop();
-//  }
-//
-//  while (numYAxis > 700) {
-//    TurnOn();
-//    Backward(100);
-//    numXAxis = analogRead(XAxis);
-//    numYAxis = analogRead(YAxis);
-//  }
-//
-//  while (numYAxis < 300) {
-//    Forward(100);
-//    numXAxis = analogRead(XAxis);
-//    numYAxis = analogRead(YAxis);
-//    OBJAvoidance();
-//  }
-//
-//  while (numXAxis > 700) {
-//    Left(100);
-//    numXAxis = analogRead(XAxis);
-//    numYAxis = analogRead(YAxis);
-//    OBJAvoidance();
-//  }
-//
-//  while (numXAxis < 300) {
-//    Right(100);
-//    numXAxis = analogRead(XAxis);
-//    numYAxis = analogRead(YAxis);
-//    OBJAvoidance();
-//  }
+
+  if (numXAxis < 700 && numXAxis > 300) {
+    Stop();
+  }
+
+  while (numYAxis > 700) {
+    TurnOn();
+    Backward(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+  }
+
+  while (numYAxis < 300) {
+    Forward(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+    OBJAvoidance();
+  }
+
+  while (numXAxis > 700) {
+    Left(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+    OBJAvoidance();
+  }
+
+  while (numXAxis < 300) {
+    Right(100);
+    numXAxis = analogRead(XAxis);
+    numYAxis = analogRead(YAxis);
+    OBJAvoidance();
+  }
 }
 // code to get distance from ultrasonic sensors
 boolean OBJAvoidance() {
@@ -250,7 +269,7 @@ void TurnOff() {
 }
 // code for robot to exit low power mode
 void TurnOn() {
-  //  Serial.println("Turned On");
+  //    Serial.println("Turned On");
   digitalWrite(LEFT_STANDBY, HIGH);
   digitalWrite(RIGHT_STANDBY, HIGH);
 }
