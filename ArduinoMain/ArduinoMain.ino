@@ -108,7 +108,17 @@ void loop() {
   //      Backward(100);
   //    }
   //   }
-
+  char data;
+  if(mySerial.available()){
+    data = mySerial.read();
+    if(data == "f"){
+      digitalWrite(52, HIGH);
+      Serial.println(data);
+    }
+    else{
+      digitalWrite(52,LOW);
+    }
+  }
   int numXAxis = analogRead(XAxis);
   int numYAxis = analogRead(YAxis);
 
