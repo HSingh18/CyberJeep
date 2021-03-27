@@ -26,10 +26,12 @@
 #define ECHO2 35
 #define TRIG3 36
 #define ECHO3 37
-#define RX 0
-#define TX 1
+#define RX 10
+#define TX 11
 #define MinDistance 2000
-SoftwareSerial mySerial = SoftwareSerial(RX, TX);
+
+SoftwareSerial BluetoothMod = SoftwareSerial(RX, TX);
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(RIGHT_BACK_A, OUTPUT);
@@ -85,19 +87,27 @@ void setup() {
   //  pinMode(TX, OUTPUT);
 
   Serial.begin(9600);
-  mySerial.begin(9600);
+  BluetoothMod.begin(9600);
   Serial.println("Starting Test:");
 }
 //int value;
-//char letter = " ";
+char command;
 // MAIN CODE
 void loop() {
-  //    if (mySerial.available()) {
-  //    letter = mySerial.read();
-  //    Serial.write(letter);
-  //    mySerial.println("OK");
-  //    Serial.print("Data ");Serial.println(mySerial.available());
-  //  }
+  if(BluetoothMod.available()){
+    command = BluetoothMod.read();
+    Serial.println(command);
+//    if(BluetoothMod.read() == 107){
+//    Serial.println("Hi");
+//    Backward(100);
+//    }
+  }
+//  Serial.print("Command = ");
+//  Serial.println(command);
+//  delay(1000);
+//  if(command == "F"){
+//    Backward(100);
+//  }
   //   if (Serial.available()) {
   //    letter = Serial.read();
   //    Serial.write(letter);
@@ -200,7 +210,7 @@ void Forward(int Speed) {
 }
 // code to move to robot backward at Speed for Duration
 void Backward(int Speed) {
-  //  Serial.println("Backward");
+  Serial.println("Backward");
   digitalWrite(RIGHT_FRONT_A, LOW);
   digitalWrite(RIGHT_FRONT_B, HIGH);
   analogWrite(RIGHT_FRONT_PWM, Speed);
