@@ -99,199 +99,192 @@ void loop() {
   if (BluetoothMod.available()) {
     command = BluetoothMod.read();
     Serial.println(command);
-    if ( command == 'b') {
-//      digitalWrite(52, HIGH);
-//      Serial.println("Turned On LED");
+    while ( command == 'b') {
       Backward(100);
+      command = BluetoothMod.read();
     }
-    else {
-      digitalWrite(52, LOW);
-      Serial.println("Did not turn on LED");
+    while (command == 'f') {
+      Forward(100);
+      command = BluetoothMod.read();
+    }
+    while (command == '0') {
       Stop();
+      command = BluetoothMod.read();
     }
-    //    if(BluetoothMod.read() == 107){
-    //    Serial.println("Hi");
-    //    Backward(100);
-    //    }
+    while (command == 'l') {
+      Left(100);
+      command = BluetoothMod.read();
+    }
+    while (command == 'r') {
+      Right(100);
+      command = BluetoothMod.read();
+    }
   }
 }
-  //  Serial.print("Command = ");
-  //  Serial.println(command);
-  //  delay(1000);
-  //  if(command == "F"){
-  //    Backward(100);
-  //  }
-  //   if (Serial.available()) {
-  //    letter = Serial.read();
-  //    Serial.write(letter);
-  //    value = letter;
-  //    Serial.write(value);
-  //    if(letter == "B"){
-  //      TurnOn();
-  //      Backward(100);
-  //    }
-  //   }
-  //  int numXAxis = analogRead(XAxis);
-  //  int numYAxis = analogRead(YAxis);
-  //
-  ////  if (numYAxis < 700 && numYAxis > 300) {
-  ////    Stop();
-  ////  }
-  ////
-  ////  if (numXAxis < 700 && numXAxis > 300) {
-  ////    Stop();
-  ////  }
-  //
-  //  while (numYAxis > 700) {
-  //    TurnOn();
-  //    Backward(100);
-  //    numXAxis = analogRead(XAxis);
-  //    numYAxis = analogRead(YAxis);
-  //  }
-  //
-  //  while (numYAxis < 300) {
-  //    Forward(100);
-  //    numXAxis = analogRead(XAxis);
-  //    numYAxis = analogRead(YAxis);
-  //    OBJAvoidance();
-  //  }
-  //
-  //  while (numXAxis > 700) {
-  //    Left(100);
-  //    numXAxis = analogRead(XAxis);
-  //    numYAxis = analogRead(YAxis);
-  //    OBJAvoidance();
-  //  }
-  //
-  //  while (numXAxis < 300) {
-  //    Right(100);
-  //    numXAxis = analogRead(XAxis);
-  //    numYAxis = analogRead(YAxis);
-  //    OBJAvoidance();
-  //  }
-  //}
-  // code to get distance from ultrasonic sensors
-  boolean OBJAvoidance() {
-    if (GetDistance1() < MinDistance || GetDistance2() < MinDistance || GetDistance3() < MinDistance) {
-      TurnOff();
-    }
-    else {
-      TurnOn();
-    }
-  }
-  int GetDistance1() {
-    digitalWrite(TRIG1, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(TRIG1, LOW);
-    int Duration1 = pulseIn(ECHO1, HIGH);
-    //  Serial.print("Distance1: "); Serial.println(Duration1);
-    return Duration1;
-  }
-  int GetDistance2() {
-    digitalWrite(TRIG2, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(TRIG2, LOW);
-    int Duration2 = pulseIn(ECHO2, HIGH);
-    //  Serial.print("Distance2: "); Serial.println(Duration2);
-    return Duration2;
-  }
-  int GetDistance3() {
-    digitalWrite(TRIG3, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(TRIG3, LOW);
-    int Duration3 = pulseIn(ECHO3, HIGH);
-    //  Serial.print("Distance3: "); Serial.println(Duration3);
-    return Duration3;
-  }
+//  else {
+//    int numXAxis = analogRead(XAxis);
+//    int numYAxis = analogRead(YAxis);
 
-  // code to move to robot forward at Speed for Duration
-  void Forward(int Speed) {
-    //  Serial.println("Forward");
-    digitalWrite(RIGHT_FRONT_A, HIGH);
-    digitalWrite(RIGHT_FRONT_B, LOW);
-    analogWrite(RIGHT_FRONT_PWM, Speed);
-    digitalWrite(RIGHT_BACK_A, HIGH);
-    digitalWrite(RIGHT_BACK_B, LOW);
-    analogWrite(RIGHT_BACK_PWM, Speed);
-    digitalWrite(LEFT_FRONT_A, HIGH);
-    digitalWrite(LEFT_FRONT_B, LOW);
-    analogWrite(LEFT_FRONT_PWM, Speed);
-    digitalWrite(LEFT_BACK_A, HIGH);
-    digitalWrite(LEFT_BACK_B, LOW);
-    analogWrite(LEFT_BACK_PWM, Speed);
+//    if (numYAxis < 700 && numYAxis > 300) {
+//      Stop();
+//    }
+//
+//    if (numXAxis < 700 && numXAxis > 300) {
+//      Stop();
+//    }
+
+//    while (numYAxis > 700) {
+//      TurnOn();
+//      Backward(100);
+//      numXAxis = analogRead(XAxis);
+//      numYAxis = analogRead(YAxis);
+//    }
+//
+//    while (numYAxis < 300) {
+//      Forward(100);
+//      numXAxis = analogRead(XAxis);
+//      numYAxis = analogRead(YAxis);
+//      OBJAvoidance();
+//    }
+//
+//    while (numXAxis > 700) {
+//      Left(100);
+//      numXAxis = analogRead(XAxis);
+//      numYAxis = analogRead(YAxis);
+//      OBJAvoidance();
+//    }
+//
+//    while (numXAxis < 300) {
+//      Right(100);
+//      numXAxis = analogRead(XAxis);
+//      numYAxis = analogRead(YAxis);
+//      OBJAvoidance();
+//    }
+//  }
+//}
+
+// code to get distance from ultrasonic sensors
+boolean OBJAvoidance() {
+  if (GetDistance1() < MinDistance || GetDistance2() < MinDistance || GetDistance3() < MinDistance) {
+    TurnOff();
   }
-  // code to move to robot backward at Speed for Duration
-  void Backward(int Speed) {
-    Serial.println("Backward");
-    digitalWrite(RIGHT_FRONT_A, LOW);
-    digitalWrite(RIGHT_FRONT_B, HIGH);
-    analogWrite(RIGHT_FRONT_PWM, Speed);
-    digitalWrite(RIGHT_BACK_A, LOW);
-    digitalWrite(RIGHT_BACK_B, HIGH);
-    analogWrite(RIGHT_BACK_PWM, Speed);
-    digitalWrite(LEFT_FRONT_A, LOW);
-    digitalWrite(LEFT_FRONT_B, HIGH);
-    analogWrite(LEFT_FRONT_PWM, Speed);
-    digitalWrite(LEFT_BACK_A, LOW);
-    digitalWrite(LEFT_BACK_B, HIGH);
-    analogWrite(LEFT_BACK_PWM, Speed);
+  else {
+    TurnOn();
   }
-  // code to move to robot left at Speed for Duration
-  void Left(int Speed) {
-    //  Serial.println("Left");
-    digitalWrite(RIGHT_FRONT_A, LOW);
-    digitalWrite(RIGHT_FRONT_B, HIGH);
-    analogWrite(RIGHT_FRONT_PWM, Speed);
-    digitalWrite(RIGHT_BACK_A, LOW);
-    digitalWrite(RIGHT_BACK_B, HIGH);
-    analogWrite(RIGHT_BACK_PWM, Speed);
-    digitalWrite(LEFT_FRONT_A, HIGH);
-    digitalWrite(LEFT_FRONT_B, LOW);
-    analogWrite(LEFT_FRONT_PWM, Speed);
-    digitalWrite(LEFT_BACK_A, HIGH);
-    digitalWrite(LEFT_BACK_B, LOW);
-    analogWrite(LEFT_BACK_PWM, Speed);
-  }
-  // code to move to robot right at Speed for Duration
-  void Right(int Speed) {
-    digitalWrite(RIGHT_FRONT_A, HIGH);
-    digitalWrite(RIGHT_FRONT_B, LOW);
-    analogWrite(RIGHT_FRONT_PWM, Speed);
-    digitalWrite(RIGHT_BACK_A, HIGH);
-    digitalWrite(RIGHT_BACK_B, LOW);
-    analogWrite(RIGHT_BACK_PWM, Speed / 2);
-    digitalWrite(LEFT_FRONT_A, LOW);
-    digitalWrite(LEFT_FRONT_B, HIGH);
-    analogWrite(LEFT_FRONT_PWM, Speed);
-    digitalWrite(LEFT_BACK_A, LOW);
-    digitalWrite(LEFT_BACK_B, HIGH);
-    analogWrite(LEFT_BACK_PWM, Speed);
-  }
-  // code to stop the robot
-  void Stop() {
-    //  Serial.println("STOP");
-    digitalWrite(RIGHT_FRONT_A, LOW);
-    digitalWrite(RIGHT_FRONT_B, LOW);
-    analogWrite(RIGHT_FRONT_PWM, 0);
-    digitalWrite(RIGHT_BACK_A, LOW);
-    digitalWrite(RIGHT_BACK_B, LOW);
-    analogWrite(RIGHT_BACK_PWM, 0);
-    digitalWrite(LEFT_FRONT_A, LOW);
-    digitalWrite(LEFT_FRONT_B, LOW);
-    analogWrite(LEFT_FRONT_PWM, 0);
-    digitalWrite(LEFT_BACK_A, LOW);
-    digitalWrite(LEFT_BACK_B, LOW);
-    analogWrite(LEFT_BACK_PWM, 0);
-  }
-  // code for robot to enter low power mode
-  void TurnOff() {
-    //  Serial.println("Turned Off");
-    digitalWrite(LEFT_STANDBY, LOW);
-    digitalWrite(RIGHT_STANDBY, LOW);
-  }
-  // code for robot to exit low power mode
-  void TurnOn() {
-    //    Serial.println("Turned On");
-    digitalWrite(LEFT_STANDBY, HIGH);
-    digitalWrite(RIGHT_STANDBY, HIGH);
-  }
+}
+int GetDistance1() {
+  digitalWrite(TRIG1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG1, LOW);
+  int Duration1 = pulseIn(ECHO1, HIGH);
+  //  Serial.print("Distance1: "); Serial.println(Duration1);
+  return Duration1;
+}
+int GetDistance2() {
+  digitalWrite(TRIG2, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG2, LOW);
+  int Duration2 = pulseIn(ECHO2, HIGH);
+  //  Serial.print("Distance2: "); Serial.println(Duration2);
+  return Duration2;
+}
+int GetDistance3() {
+  digitalWrite(TRIG3, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG3, LOW);
+  int Duration3 = pulseIn(ECHO3, HIGH);
+  //  Serial.print("Distance3: "); Serial.println(Duration3);
+  return Duration3;
+}
+
+// code to move to robot forward at Speed for Duration
+void Forward(int Speed) {
+  //  Serial.println("Forward");
+  digitalWrite(RIGHT_FRONT_A, HIGH);
+  digitalWrite(RIGHT_FRONT_B, LOW);
+  analogWrite(RIGHT_FRONT_PWM, Speed);
+  digitalWrite(RIGHT_BACK_A, HIGH);
+  digitalWrite(RIGHT_BACK_B, LOW);
+  analogWrite(RIGHT_BACK_PWM, Speed);
+  digitalWrite(LEFT_FRONT_A, HIGH);
+  digitalWrite(LEFT_FRONT_B, LOW);
+  analogWrite(LEFT_FRONT_PWM, Speed);
+  digitalWrite(LEFT_BACK_A, HIGH);
+  digitalWrite(LEFT_BACK_B, LOW);
+  analogWrite(LEFT_BACK_PWM, Speed);
+}
+// code to move to robot backward at Speed for Duration
+void Backward(int Speed) {
+  Serial.println("Backward");
+  digitalWrite(RIGHT_FRONT_A, LOW);
+  digitalWrite(RIGHT_FRONT_B, HIGH);
+  analogWrite(RIGHT_FRONT_PWM, Speed);
+  digitalWrite(RIGHT_BACK_A, LOW);
+  digitalWrite(RIGHT_BACK_B, HIGH);
+  analogWrite(RIGHT_BACK_PWM, Speed);
+  digitalWrite(LEFT_FRONT_A, LOW);
+  digitalWrite(LEFT_FRONT_B, HIGH);
+  analogWrite(LEFT_FRONT_PWM, Speed);
+  digitalWrite(LEFT_BACK_A, LOW);
+  digitalWrite(LEFT_BACK_B, HIGH);
+  analogWrite(LEFT_BACK_PWM, Speed);
+}
+// code to move to robot left at Speed for Duration
+void Left(int Speed) {
+  //  Serial.println("Left");
+  digitalWrite(RIGHT_FRONT_A, LOW);
+  digitalWrite(RIGHT_FRONT_B, HIGH);
+  analogWrite(RIGHT_FRONT_PWM, Speed);
+  digitalWrite(RIGHT_BACK_A, LOW);
+  digitalWrite(RIGHT_BACK_B, HIGH);
+  analogWrite(RIGHT_BACK_PWM, Speed);
+  digitalWrite(LEFT_FRONT_A, HIGH);
+  digitalWrite(LEFT_FRONT_B, LOW);
+  analogWrite(LEFT_FRONT_PWM, Speed);
+  digitalWrite(LEFT_BACK_A, HIGH);
+  digitalWrite(LEFT_BACK_B, LOW);
+  analogWrite(LEFT_BACK_PWM, Speed);
+}
+// code to move to robot right at Speed for Duration
+void Right(int Speed) {
+  digitalWrite(RIGHT_FRONT_A, HIGH);
+  digitalWrite(RIGHT_FRONT_B, LOW);
+  analogWrite(RIGHT_FRONT_PWM, Speed);
+  digitalWrite(RIGHT_BACK_A, HIGH);
+  digitalWrite(RIGHT_BACK_B, LOW);
+  analogWrite(RIGHT_BACK_PWM, Speed / 2);
+  digitalWrite(LEFT_FRONT_A, LOW);
+  digitalWrite(LEFT_FRONT_B, HIGH);
+  analogWrite(LEFT_FRONT_PWM, Speed);
+  digitalWrite(LEFT_BACK_A, LOW);
+  digitalWrite(LEFT_BACK_B, HIGH);
+  analogWrite(LEFT_BACK_PWM, Speed);
+}
+// code to stop the robot
+void Stop() {
+  //  Serial.println("STOP");
+  digitalWrite(RIGHT_FRONT_A, LOW);
+  digitalWrite(RIGHT_FRONT_B, LOW);
+  analogWrite(RIGHT_FRONT_PWM, 0);
+  digitalWrite(RIGHT_BACK_A, LOW);
+  digitalWrite(RIGHT_BACK_B, LOW);
+  analogWrite(RIGHT_BACK_PWM, 0);
+  digitalWrite(LEFT_FRONT_A, LOW);
+  digitalWrite(LEFT_FRONT_B, LOW);
+  analogWrite(LEFT_FRONT_PWM, 0);
+  digitalWrite(LEFT_BACK_A, LOW);
+  digitalWrite(LEFT_BACK_B, LOW);
+  analogWrite(LEFT_BACK_PWM, 0);
+}
+// code for robot to enter low power mode
+void TurnOff() {
+  //  Serial.println("Turned Off");
+  digitalWrite(LEFT_STANDBY, LOW);
+  digitalWrite(RIGHT_STANDBY, LOW);
+}
+// code for robot to exit low power mode
+void TurnOn() {
+  //    Serial.println("Turned On");
+  digitalWrite(LEFT_STANDBY, HIGH);
+  digitalWrite(RIGHT_STANDBY, HIGH);
+}
