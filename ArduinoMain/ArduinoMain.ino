@@ -100,22 +100,26 @@ void loop() {
     command = BluetoothMod.read();
     Serial.println(command);
     while ( command == 'b') {
+      TurnOn();
       Backward(100);
       command = BluetoothMod.read();
     }
-    while (command == 'f') {
+   while (command == 'f') {
+    TurnOn();
       Forward(100);
       command = BluetoothMod.read();
     }
-    while (command == '0') {
+    while (command == 'z') {
       Stop();
       command = BluetoothMod.read();
     }
-    while (command == 'l') {
+    while (command == 'r') {
+      TurnOn();
       Left(100);
       command = BluetoothMod.read();
     }
-    while (command == 'r') {
+    while (command == 'l') {
+      TurnOn();
       Right(100);
       command = BluetoothMod.read();
     }
@@ -215,7 +219,8 @@ void Forward(int Speed) {
 }
 // code to move to robot backward at Speed for Duration
 void Backward(int Speed) {
-  Serial.println("Backward");
+//  Serial.println("Backward");
+//  delay(1000);
   digitalWrite(RIGHT_FRONT_A, LOW);
   digitalWrite(RIGHT_FRONT_B, HIGH);
   analogWrite(RIGHT_FRONT_PWM, Speed);
@@ -228,6 +233,7 @@ void Backward(int Speed) {
   digitalWrite(LEFT_BACK_A, LOW);
   digitalWrite(LEFT_BACK_B, HIGH);
   analogWrite(LEFT_BACK_PWM, Speed);
+//  Serial.println("Backwards2");
 }
 // code to move to robot left at Speed for Duration
 void Left(int Speed) {
